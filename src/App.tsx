@@ -1,14 +1,12 @@
-import { useState } from 'react';
 import './App.css';
+import SideBar from './components/SideBar';
+import Main from './components/Main';
 
 function App() {
-
   return (
-    <div className="container-fluid">
-      <div className="row mt-4">
-        <div className="col m-4 cover">
-        </div>
-      </div>
+    <div className="d-flex flex-row">
+      <SideBar />
+      <Main />
     </div>
   );
 }

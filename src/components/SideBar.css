@@ -1,0 +1,21 @@
+.side-bar {
+  width: 255px;
+  padding: 20px;
+  margin-top: 30px;
+  margin-bottom: 145px;
+  background-color: white;
+  font-size: 1.05rem;
+}
+
+.side-bar-center {
+  background-color: rgba(217, 217, 217, 1);
+}
+
+.side-bar-sec {
+  margin-top: 15px;
+  margin-bottom: 35px;
+}
+
+.side-bar-sec h5 {
+  font-size: 1.15rem;
+}

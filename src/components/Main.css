@@ -1,0 +1,75 @@
+.main-card {
+  display: flex;
+  flex-direction: column;
+  width: 640px;
+  min-width: 640px;
+  height: 400px;
+  margin-top: 20px;
+  background-color: white;
+}
+
+.main-card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 45px;
+  width: 100%;
+  background-color: rgba(0, 134, 202, 1);
+  padding: 0 10px;
+}
+
+.airline-logo {
+  height: 100%;
+  margin-left: 10px;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 3rem;
+  color: white;
+}
+
+.main-card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-line {
+  height: 1px;
+  background-color: grey;
+}
+
+.main-line-title {
+  color: rgba(255, 177, 103, 1);
+}
+
+.main-card-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 40px;
+  width: 100%;
+  padding-top: 8px;
+  background-color: rgba(255, 177, 103, 1);
+  color: white;
+  border-radius: 0px;
+  border-width: 0px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.center-line {
+  height: 3px;
+  background-color: rgba(0, 134, 202, 1);
+}
+
+.price-term {
+  font-size: 0.85rem;
+  margin-top: -4px;
+}
+
+.card-dir {
+  font-size: 1.4rem;
+}
+
+.card-dir-blue {
+  color: rgba(0, 134, 202, 1);
+}
