@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './SideBar.css';
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import { filterFlights } from '../store/flightSlice'
 
 const sortTerms = [
   '- по возрастанию цены',
@@ -12,8 +14,10 @@ const filterTerms = ['- 1 пересадка', '- без пересадок'];
 const airlines = ['- LOT Polish Airlines', '- Аэрофлот - российские авиалинии'];
 
 export default function SideBar() {
+  const dispatch = useAppDispatch();
+  const curentFilterTerm = useAppSelector((state) => state.flights.curentFilterTerm);
+
   const [curentSortTerm, setCurentSortTerm] = useState(sortTerms[0]);
-  const [curentFilterTerm, setCurentFilterTerm] = useState('');
   const [curentAirline, setCurentAirline] = useState('');
 
   const [minPrice, setMinPrice] = useState(0);
@@ -51,7 +55,7 @@ export default function SideBar() {
           value={filterTerm}
           checked={curentFilterTerm === filterTerm}
           onChange={() => {
-            setCurentFilterTerm(filterTerm);
+            dispatch(filterFlights(filterTerm))
           }}
         />
         <label

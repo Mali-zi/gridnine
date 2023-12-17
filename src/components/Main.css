@@ -3,7 +3,6 @@
   flex-direction: column;
   width: 640px;
   min-width: 640px;
-  height: 400px;
   margin-top: 20px;
   background-color: white;
 }
@@ -72,4 +71,8 @@
 
 .card-dir-blue {
   color: rgba(0, 134, 202, 1);
+}
+
+.card-dir-city {
+  width: 300px;
 }
