@@ -1,4 +1,3 @@
-import { FlightElement } from '../modals';
 import { INewFlight } from '../store/flightSlice';
 import CardSection from './CardSection';
 

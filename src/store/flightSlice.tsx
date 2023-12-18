@@ -8,7 +8,7 @@ export interface INewFlight {
   legs: Leg[];
 }
 
-const flightsData: Flights = data as Flights;
+const flightsData: Flights = data as unknown as Flights;
 const getFlights = flightsData.result.flights;
 const initFlights: INewFlight[] = [];
 getFlights.map((flight) => {
