@@ -30,8 +30,8 @@ export default function SideBar() {
     (state) => state.flights.curentSortTerm
   );
 
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(200000);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
 
   const sortSection = sortTerms.map((sortTerm, index) => {
     return (
@@ -65,8 +65,9 @@ export default function SideBar() {
           value={filterTerm}
           checked={curentFilterTerm === filterTerm}
           onChange={() => {
-            dispatch(setfilterFlights(filterTerm));
+            dispatch(setCurentAirline(curentAirline));
             dispatch(setPrice({ minPrice, maxPrice }));
+            dispatch(setfilterFlights(filterTerm));
             dispatch(setSortFlights(curentSortTerm));
           }}
         />
@@ -94,9 +95,9 @@ export default function SideBar() {
           value={airline.caption}
           checked={curentAirline === airline.caption}
           onChange={() => {
-            dispatch(setfilterFlights(curentFilterTerm));
-            dispatch(setPrice({ minPrice, maxPrice }));
             dispatch(setCurentAirline(airline.caption));
+            dispatch(setPrice({ minPrice, maxPrice }));
+            dispatch(setfilterFlights(curentFilterTerm));
             dispatch(setSortFlights(curentSortTerm));
           }}
         />
@@ -106,15 +107,18 @@ export default function SideBar() {
         >
           {airline.caption}
         </label>
-        <span className="ms-2 flex-fill">от&nbsp;{airline.minPrice}&nbsp;р.</span>
+        {!!airline.minPrice && <span className="ms-2 flex-fill">
+          от&nbsp;{airline.minPrice}&nbsp;р.
+        </span>}
       </li>
     );
   });
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    dispatch(setfilterFlights(curentFilterTerm));
+    dispatch(setCurentAirline(curentAirline));
     dispatch(setPrice({ minPrice, maxPrice }));
+    dispatch(setfilterFlights(curentFilterTerm));
     dispatch(setSortFlights(curentSortTerm));
   }
 
@@ -128,11 +132,11 @@ export default function SideBar() {
         <div className="side-bar">
           <div className="side-bar-sec">
             <h5 className="mb-3">Сортировать</h5>
-            {sortSection}
+            <ul>{sortSection}</ul>
           </div>
           <div className="side-bar-sec mb-0">
             <h5 className="my-2">Фильтровать</h5>
-            {filterSection}
+            <ul>{filterSection}</ul>
           </div>
           <form
             className="d-flex flex-column side-bar-sec mt-2 mb-0"
@@ -150,7 +154,7 @@ export default function SideBar() {
                 className="ms-1 w-100 me-4"
                 value={minPrice}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setMinPrice(Number(e.target.value))
+                  setMinPrice(e.target.value)
                 }
               />
             </div>
@@ -164,7 +168,7 @@ export default function SideBar() {
                 className="ms-1 w-100 me-4"
                 value={maxPrice}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setMaxPrice(Number(e.target.value))
+                  setMaxPrice(e.target.value)
                 }
               />
             </div>
@@ -172,7 +176,7 @@ export default function SideBar() {
           </form>
           <div className="side-bar-sec mt-2 mb-4">
             <h5 className="mb-3">Авиакомпании</h5>
-            {airlineSection}
+            <ul>{airlineSection}</ul>
           </div>
         </div>
       </div>

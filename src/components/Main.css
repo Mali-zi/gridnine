@@ -76,3 +76,9 @@
 .card-dir-city {
   width: 300px;
 }
+
+.notFound {
+  font-size: 3rem;
+  font-weight: 600;
+  color: rgb(213, 63, 8);;
+}
