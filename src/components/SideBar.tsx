@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './SideBar.css';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { filterFlights } from '../store/flightSlice'
+import {
+  setAirlines,
+  setCurentAirline,
+  setfilterFlights,
+  setPrice,
+  setSortFlights,
+} from '../store/flightSlice';
 
 const sortTerms = [
   '- по возрастанию цены',
@@ -11,17 +17,21 @@ const sortTerms = [
 
 const filterTerms = ['- 1 пересадка', '- без пересадок'];
 
-const airlines = ['- LOT Polish Airlines', '- Аэрофлот - российские авиалинии'];
-
 export default function SideBar() {
   const dispatch = useAppDispatch();
-  const curentFilterTerm = useAppSelector((state) => state.flights.curentFilterTerm);
+  const flights = useAppSelector((state) => state.flights.flights);
+  const airlines = useAppSelector((state) => state.flights.airlines);
+  const curentAirline = useAppSelector((state) => state.flights.curentAirline);
 
-  const [curentSortTerm, setCurentSortTerm] = useState(sortTerms[0]);
-  const [curentAirline, setCurentAirline] = useState('');
+  const curentFilterTerm = useAppSelector(
+    (state) => state.flights.curentFilterTerm
+  );
+  const curentSortTerm = useAppSelector(
+    (state) => state.flights.curentSortTerm
+  );
 
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(10000);
+  const [maxPrice, setMaxPrice] = useState(200000);
 
   const sortSection = sortTerms.map((sortTerm, index) => {
     return (
@@ -34,7 +44,7 @@ export default function SideBar() {
           value={sortTerm}
           checked={curentSortTerm === sortTerm}
           onChange={() => {
-            setCurentSortTerm(sortTerm);
+            dispatch(setSortFlights(sortTerm));
           }}
         />
         <label className="form-check-label" htmlFor={`sortTerm-${index}`}>
@@ -55,7 +65,9 @@ export default function SideBar() {
           value={filterTerm}
           checked={curentFilterTerm === filterTerm}
           onChange={() => {
-            dispatch(filterFlights(filterTerm))
+            dispatch(setfilterFlights(filterTerm));
+            dispatch(setPrice({ minPrice, maxPrice }));
+            dispatch(setSortFlights(curentSortTerm));
           }}
         />
         <label
@@ -70,25 +82,45 @@ export default function SideBar() {
 
   const airlineSection = airlines.map((airline, index) => {
     return (
-      <li key={index} className="form-check d-flex flex-row justify-content-start">
+      <li
+        key={index}
+        className="form-check d-flex flex-row justify-content-start"
+      >
         <input
           type="checkbox"
           className="form-check-input"
           name={`airline-${index}`}
           id={`airline-${index}`}
-          value={airline}
-          checked={curentAirline === airline}
+          value={airline.caption}
+          checked={curentAirline === airline.caption}
           onChange={() => {
-            setCurentAirline(airline);
+            dispatch(setfilterFlights(curentFilterTerm));
+            dispatch(setPrice({ minPrice, maxPrice }));
+            dispatch(setCurentAirline(airline.caption));
+            dispatch(setSortFlights(curentSortTerm));
           }}
         />
-        <label className="form-check-label ms-1 text-truncate" htmlFor={`airline-${index}`}>
-          {airline}
+        <label
+          className="form-check-label ms-1 text-truncate"
+          htmlFor={`airline-${index}`}
+        >
+          {airline.caption}
         </label>
-        <span className="ms-2 flex-fill">от&nbsp;21049&nbsp;р.</span>
+        <span className="ms-2 flex-fill">от&nbsp;{airline.minPrice}&nbsp;р.</span>
       </li>
     );
   });
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    dispatch(setfilterFlights(curentFilterTerm));
+    dispatch(setPrice({ minPrice, maxPrice }));
+    dispatch(setSortFlights(curentSortTerm));
+  }
+
+  useEffect(() => {
+    dispatch(setAirlines());
+  }, [flights]);
 
   return (
     <section id="side-bar" className="p-3">
@@ -102,13 +134,17 @@ export default function SideBar() {
             <h5 className="my-2">Фильтровать</h5>
             {filterSection}
           </div>
-          <div className="d-flex flex-column side-bar-sec mt-2 mb-0">
+          <form
+            className="d-flex flex-column side-bar-sec mt-2 mb-0"
+            autoComplete="off"
+            onSubmit={onSubmit}
+          >
             <h5 className="my-2">Цена</h5>
             <div className="d-flex flex-row my-2">
               <label htmlFor="minPrice">От</label>
               <input
                 type="text"
-                pattern="[0-9]"
+                // pattern="[0-9]"
                 name="minPrice"
                 id="minPrice"
                 className="ms-1 w-100 me-4"
@@ -122,7 +158,7 @@ export default function SideBar() {
               <label htmlFor="maxPrice">До</label>
               <input
                 type="text"
-                pattern="[0-9]"
+                // pattern="[0-9]"
                 name="maxPrice"
                 id="maxPrice"
                 className="ms-1 w-100 me-4"
@@ -132,7 +168,8 @@ export default function SideBar() {
                 }
               />
             </div>
-          </div>
+            <input type="submit" hidden />
+          </form>
           <div className="side-bar-sec mt-2 mb-4">
             <h5 className="mb-3">Авиакомпании</h5>
             {airlineSection}
